@@ -49,7 +49,7 @@ class Student:
         
         return self._enrolled
 
-def generateStudents():
+def generate_students():
     ''' Import students from the myRandomStudents csv file. '''
     
     import csv
@@ -63,13 +63,53 @@ def generateStudents():
                 i+=1
             Student(line[0], int(line[1]), line[2],line[3], classes)
 
+def class_count():
+    ''' Count how many students in the class the user enters. '''
+    
+    class_code = input("Enter class code: ")
+    total = 0
+    for student in student_list:
+        if class_code.upper() in student.get_classes():
+            total += 1
+    print("Total students:", total)
+
+def class_list():
+    ''' Get list of students in selected class. '''
+    
+    class_code = input("Enter class code: ")
+    total = 0
+    for student in student_list:
+        if class_code.upper() in student.get_classes():
+            print(student.get_name())
+            total += 1
+    print("Total students:", total)    
 
 def show_all():
     ''' This function shows the names of all students. '''
     
     for student in student_list:
         print(student.get_name())
+        
+def search():
+    ''' Display details of student. '''
     
+    name = input("Name: ")
+    for student in student_list:
+        # using .lower() to ensure we get matches with different cases
+        if name.lower() in student.get_name().lower():
+            show_details(student)
+ 
+  
+def show_details(student_to_show):
+    ''' Display details of student. '''
+    
+    print("####################")
+    print(student_to_show.get_name())
+    print("--------------------")
+    print("Age:", student_to_show.get_age())
+    print("Phone:", student_to_show.get_phone())
+    print("")
+        
 student_list = []
 
 # Create some students to start with
@@ -77,4 +117,5 @@ Student("Jack", 16, "0273956577", "Male", ["GRA", "MAT", "ENG"])
 Student("Jill", 15, "0271111111", "Female", ["MAT", "ART"])
 Student("Matt", 17, "0217771117", "Male", ["MAT", "PHY", "ART"])
 
-show_all()
+generate_students()
+search()
