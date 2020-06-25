@@ -93,7 +93,7 @@ def show_all():
 def search():
     ''' Display details of student. '''
     
-    name = input("Name: ")
+    name = input("Name to search for: ")
     for student in student_list:
         # using .lower() to ensure we get matches with different cases
         if name.lower() in student.get_name().lower():
@@ -109,7 +109,38 @@ def show_details(student_to_show):
     print("Age:", student_to_show.get_age())
     print("Phone:", student_to_show.get_phone())
     print("")
-        
+
+def add_student():
+    ''' Add new student record. '''
+    
+    print("Enter student details")
+    name = input("Name: ")
+    # ask for student age. Use while loop to ensure we get an integer
+    ask_age = True
+    while ask_age == True:
+        try:
+            age = int(input("Age: "))
+            ask_age = False
+        except:
+            print("Invalid input. Please enter an integer.")
+
+    phone = input("Phone: ")
+    gender = input("Gender: ")
+    new_classes = []
+    ask_class = True
+    while ask_class == True:
+        new_class = input("Class code (end to finish): ")
+        if new_class.lower() == "end":
+            ask_class = False
+        elif new_class == "":
+            print("Please enter a class code")
+        else:
+            new_classes.append(new_class)
+    # instantiate the new student
+    Student(name, age, phone, gender, new_classes)
+    
+
+     
 student_list = []
 
 # Create some students to start with
@@ -118,4 +149,24 @@ Student("Jill", 15, "0271111111", "Female", ["MAT", "ART"])
 Student("Matt", 17, "0217771117", "Male", ["MAT", "PHY", "ART"])
 
 generate_students()
-search()
+
+run_program = True
+while run_program == True:
+    print("Main Menu\n-----------")
+    print("1. Search")
+    print("2. Add student")
+    print("3. Class list")
+    print("4. Quit")
+    selection = int(input("Selection:"))
+    if selection == 1:
+        search()
+    elif selection == 2:
+        add_student()
+    elif selection == 3:
+        class_list()
+    elif selection == 4:
+        run_program = False
+    else:
+        print("Enter a number from 1-4")
+
+
