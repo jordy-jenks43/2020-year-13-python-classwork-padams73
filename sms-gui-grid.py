@@ -1,6 +1,7 @@
 ''' This program is a student management system, allowing users to add student records and run reports. '''
 
 import generate
+from guizero import App, Text, PushButton, TextBox, ListBox
 
 class Teacher:
     ''' Teachers have a name and a class they are attached to. '''
@@ -76,7 +77,9 @@ def generate_teachers():
     ''' Import teachers from the teachers csv file. '''
     
     import csv
-    with open('teachers.csv', newline='') as csvfile:
+    # Notice the encoding setting. This avoids the byte order mark (BOM)
+    # appearing. This looks like: ﻿
+    with open('teachers.csv', encoding="utf-8-sig", newline='') as csvfile:
         filereader = csv.reader(csvfile)
         for line in filereader:
             Teacher(line[0], line[1])
@@ -130,11 +133,15 @@ def show_all():
 def search():
     ''' Display details of student. '''
     
-    name = input("Name to search for: ")
+    # Empty the search_list listbox
+    search_list.clear()
+
     for student in student_list:
         # using .lower() to ensure we get matches with different cases
-        if name.lower() in student.get_name().lower():
-            show_details(student)
+        if search_box.value.lower() in student.get_name().lower():
+            
+            search_list.append(student.get_name())
+
  
   
 def show_details(student_to_show):
@@ -175,6 +182,15 @@ def add_student():
             new_classes.append(new_class)
     # instantiate the new student
     Student(name, age, phone, gender, new_classes)
+
+def print_tname(t):
+    ''' Print the name of the selected teacher. '''
+    
+    print(t.get_tname())
+
+
+
+
     
 # Empty lists to store all teachers and students
 teacher_list = []     
@@ -188,23 +204,20 @@ Student("Matt", 17, "0217771117", "Male", ["MAT", "PHY", "ART"])
 generate_teachers()
 generate_students()
 
-run_program = True
-while run_program == True:
-    print("Main Menu\n-----------")
-    print("1. Search")
-    print("2. Add student")
-    print("3. Class list")
-    print("4. Quit")
-    selection = int(input("Selection:"))
-    if selection == 1:
-        search()
-    elif selection == 2:
-        add_student()
-    elif selection == 3:
-        class_list()
-    elif selection == 4:
-        run_program = False
-    else:
-        print("Enter a number from 1-4")
+# We create an instance of the App class (which is just the a window), giving it a title
+app = App(title="Student Management System", layout="grid")
 
+
+
+
+# Loop through teacher list and display names in text boxes
+i = 0
+for teacher in teacher_list:
+    teacher_name = Text(app, text=teacher.get_tname(), grid=[0,i])
+    # Each button has the teacher's name as the label. It calls the print_tname() function and sends the teacher object to that function
+    #teacher_button = PushButton(app, text=teacher.get_tname(), grid=[1, i]).update_command(print_tname, [teacher])
+    i += 1
+
+# This is the last line, which is needed to start the GUI running
+app.display()
 
