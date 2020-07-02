@@ -16,6 +16,7 @@ app = App(title="This is our window")
 
 text_entry = TextBox(app)
 
+
 # A button below the text_entry widget will call the print_text() function, printing out the content of the TextBox
 print_button = PushButton(app, text="Print", command=print_text)
 
