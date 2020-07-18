@@ -1,6 +1,10 @@
-''' This program is a student management system, allowing users to add student records and run reports. '''
+''' This program is the starter code for the student management system that we are building a GUI for
+ It should be used for each new task. 
+ It has class definitions and generates all students and teachers, otherwise has no functionality.
+ You will need to have this saved in the same folder as the teachers.csv and myRandomStudents.csv files.
+ '''
 
-from guizero import App, Text
+from guizero import App, Text, TextBox, Combo, ListBox, PushButton
 
 
 class Teacher:
@@ -98,89 +102,21 @@ def generate_students():
                 i+=1
             Student(line[0], int(line[1]), line[2],line[3], classes)
 
-def class_count():
-    ''' Count how many students in the class the user enters. '''
-    
-    class_code = input("Enter class code: ")
-    total = 0
-    for student in student_list:
-        if class_code.upper() in student.get_classes():
-            total += 1
-    # Print statement can be uncommented to check if function is getting correct number
-    #print("Total students:", total)
-    return total
-
-def class_list():
-    ''' Get list of students in selected class. '''
-    
-    class_code = input("Enter class code: ")
-    # get the name of the teacher who teaches this class
-    for teacher in teacher_list:
-        if teacher.get_tclass() == class_code:
-            print("Teacher: {}".format(teacher.get_tname()))
-    # display names of all students in class, as well as a count
-    total = 0
-    for student in student_list:
-        if class_code.upper() in student.get_classes():
-            print(student.get_name())
-            total += 1
-    print("Total students:", total)    
-
-def show_all():
-    ''' This function shows the names of all students. '''
-    
-    for student in student_list:
-        print(student.get_name())
-        
-
-  
-def show_details(student_to_show):
-    ''' Display details of student. '''
-    
-    print("####################")
-    print(student_to_show.get_name())
-    print("--------------------")
-    print("Age:", student_to_show.get_age())
-    print("Phone:", student_to_show.get_phone())
-    print("")
 
 def add_student():
-    ''' Add new student record. '''
+    ''' Create new student using the data entered by the user. '''
     
-    print("Enter student details")
-    name = input("Name: ")
-    # ask for student age. Use while loop to ensure we get an integer
-    ask_age = True
-    while ask_age == True:
-        try:
-            age = int(input("Age: "))
-            ask_age = False
-        except:
-            print("Invalid input. Please enter an integer.")
+    Student(name_text.value, age_text.value, phone_text.value, gender_combo.value, class_listbox.value)
 
-    phone = input("Phone: ")
-    gender = input("Gender: ")
-    new_classes = []
-    ask_class = True
-    while ask_class == True:
-        new_class = input("Class code (end to finish): ")
-        if new_class.lower() == "end":
-            ask_class = False
-        elif new_class == "":
-            print("Please enter a class code")
-        else:
-            new_classes.append(new_class)
-    # instantiate the new student
-    Student(name, age, phone, gender, new_classes)
+    update_student_listbox()
 
-def print_tname(t):
-    ''' Print the name of the selected teacher. '''
+def update_student_listbox():
+    ''' Display all students in a listbox. '''
     
-    print(t.get_tname())
-
-
-
-    
+    students_list.clear()
+    for student in student_list:
+        students_list.append(student.get_name())
+  
 # Empty lists to store all teachers and students
 teacher_list = []     
 student_list = []
@@ -194,15 +130,24 @@ generate_teachers()
 generate_students()
 
 # create the application interface
-app = App(title="Student management system")
+app = App(title="Student management system", layout="grid")
 
-# teacher label displays names of all teachers
-teacher_label = Text(app)
+# This is section where you add any GUI widgets
 
-for teacher in teacher_list:
-    teacher_label.value += teacher.get_tname() + "\n"
+heading = Text(app, text="Add new student", grid=[0,0])
+name_lbl = Text(app, text="Name", grid=[0,1])
+name_text = TextBox(app, grid=[1,1])
+age_lbl = Text(app, text="Age", grid=[0,2])
+age_text = TextBox(app, grid=[1,2])
+phone_lbl = Text(app, text="Phone", grid=[0,3])
+phone_text = TextBox(app, grid=[1,3])
+gender_lbl = Text(app, text="Gender", grid=[0,4])
+gender_combo = Combo(app, options=["Male", "Female", "Other"], grid=[1,4])
+class_lbl = Text(app, text="Classes", grid=[0,5], align="top")
+class_listbox = ListBox(app, ["GRA", "BIO", "PHY", "MAT", "DTC", "ART", "ENG", "XYZ"], grid=[1,5], multiselect=True)
+add_button = PushButton(app, text="Add student", grid=[0,6], command=add_student)
 
-search_box = TextBox(app)
+students_list = ListBox(app, grid=[2,1,1,6], align="top")
 
 # Start the program
 app.display()

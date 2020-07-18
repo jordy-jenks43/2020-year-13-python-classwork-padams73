@@ -229,8 +229,8 @@ def update_search_results():
 
 
 # Listbox for results of search
-search_list = ListBox(app, grid=[0,2])
-search_list.when_left_button_pressed = update_search_results
+search_list = ListBox(app, grid=[0,2], command=update_search_results)
+
 
 
 
