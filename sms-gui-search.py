@@ -1,6 +1,6 @@
 ''' This program is a student management system, allowing users to add student records and run reports. '''
 
-import generate
+
 from guizero import App, Text, PushButton, TextBox, ListBox
 
 class Teacher:
@@ -136,12 +136,20 @@ def search():
     # Empty the search_list listbox
     search_list.clear()
 
+    # Clear the search results
+    search_name.clear() 
+    search_age.clear()
+    search_phone.clear()
+    search_gender.clear()
+    
+    result_count = 0
     for student in student_list:
         # using .lower() to ensure we get matches with different cases
         if search_box.value.lower() in student.get_name().lower():
-            
+            result_count += 1
             search_list.append(student.get_name())
-
+    if result_count == 0:
+        search_name.value = "No results found"
  
   
 def show_details(student_to_show):
@@ -189,6 +197,21 @@ def print_tname(t):
     print(t.get_tname())
 
 
+def update_search_results():
+    ''' Display details of selected student. '''
+    
+
+    
+    # set the initial value of the search_results text label
+    for student in student_list:
+        if student.get_name() == search_list.value:
+            
+            search_name.value = student.get_name()
+            search_age.value = student.get_age()
+            search_phone.value = student.get_phone()
+            search_gender.value = student.get_gender()
+    
+
 
 
     
@@ -205,31 +228,26 @@ generate_teachers()
 generate_students()
 
 # We create an instance of the App class (which is just the a window), giving it a title
-app = App(title="Student Management System", layout="grid")
+app = App(title="Student Management System")
 
 
 # In this section we have a text entry field where the user can type the name of the student to search for
 # When the Search button is pressed, a search function is called which then displays the names for all matching records in a list
-search_box = TextBox(app, width="fill", grid=[0,0])
-search_button = PushButton(app, text="Search", grid=[0,1], command=search)
-
-
-
-# Results label
-search_results = Text(app, grid=[1,2], align="left")
-
-def update_search_results():
-    ''' Display details of selected student. '''
-    
-    # set the initial value of the search_results text label
-
-    search_results.clear()
-    search_results.value = "Results\n"
-    search_results.append(search_list.value)
-
+search_box = TextBox(app, width=20)
+search_button = PushButton(app, text="Search", command=search)
 
 # Listbox for results of search
-search_list = ListBox(app, grid=[0,2], command=update_search_results)
+search_list = ListBox(app, command=update_search_results)
+
+# Results labels
+search_name = Text(app)
+search_age = Text(app)
+search_phone = Text(app)
+search_gender = Text(app)
+
+
+
+
 
 
 
