@@ -1,5 +1,5 @@
 ''' This program is the starter code for the student management system that we are building a GUI for
- It should be used for each new task. 
+ It should be used for each new task.
  It has class definitions and generates all students and teachers, otherwise has no functionality.
  You will need to have this saved in the same folder as the teachers.csv and myRandomStudents.csv files.
  '''
@@ -9,10 +9,10 @@ from guizero import App, Text, TextBox, Combo, ListBox, PushButton
 
 class Teacher:
     ''' Teachers have a name and a class they are attached to. '''
-    
+
     def __init__(self, tname, tclass):
         ''' Set the attributes of the new teacher. '''
-        
+
         self._tname = tname
         self._tclass = tclass
         # add new teacher to the list of all teachers
@@ -20,12 +20,12 @@ class Teacher:
 
     def get_tname(self):
         ''' Return name of teacher. '''
-        
+
         return self._tname
-    
+
     def get_tclass(self):
         ''' Return the class. '''
-        
+
         return self._tclass
 
 class Student:
